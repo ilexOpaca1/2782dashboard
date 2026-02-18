@@ -1,0 +1,17 @@
+{
+  "last_generated": "2026-02-18",
+  "cases": [
+    {
+      "id": "ARB-001",
+      "title": "Telework Enforcement",
+      "owner": "Union",
+      "stage": "Discovery",
+      "phase": 2,
+      "phases_total": 5,
+      "last_update": "2026-02-10",
+      "next_milestone": "Agency document production",
+      "window": "Q3 2026",
+      "public_notes": "Awaiting agency production; preparing interrogatories."
+    }
+  ]
+}
