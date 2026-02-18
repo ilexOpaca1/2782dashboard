@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <title>Union Case Dashboard</title>
+</head>
+<body>
+  <header>
+    <h1>Union Case Dashboard</h1>
+    <div id="meta"></div>
+  </header>
+
+  <main>
+    <input id="q" placeholder="Search cases…" />
+    <div id="list"></div>
+  </main>
+
+<script>
+const elMeta = document.getElementById("meta");
+const elList = document.getElementById("list");
+const elQ = document.getElementById("q");
+let cases = [];
+
+function pct(c){ return Math.round((c.phase / c.phases_total) * 100); }
+
+function render(filter=""){
+  const f = filter.trim().toLowerCase();
+  elList.innerHTML = cases
+    .filter(c => !f || (c.title + " " + c.stage + " " + c.id).toLowerCase().includes(f))
+    .map(c => `
+      <section class="card">
+        <div class="top">
+          <div>
+            <h2>${c.title}</h2>
+            <div class="sub">${c.id} • Stage: <b>${c.stage}</b></div>
+          </div>
+          <div class="pct">${pct(c)}%</div>
+        </div>
+        <div class="bar"><div class="fill" style="width:${pct(c)}%"></div></div>
+        <div class="grid">
+          <div><span>Last update</span>${c.last_update}</div>
+          <div><span>Next milestone</span>${c.next_milestone}</div>
+          <div><span>Window</span>${c.window}</div>
+        </div>
+        <p class="notes">${c.public_notes || ""}</p>
+      </section>
+    `).join("");
+}
+
+fetch("./cases.json").then(r => r.json()).then(data => {
+  cases = data.cases || [];
+  elMeta.textContent = "Updated: " + (data.last_generated || "—");
+  render();
+});
+
+elQ.addEventListener("input", e => render(e.target.value));
+</script>
+</body>
+</html>
